@@ -14,7 +14,7 @@
 # Neither the name of the Jupyter Development Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-FROM python:3.6
+FROM public.ecr.aws/docker/library/python:3.7
 
 ARG NB_USER="sagemaker-user"
 ARG NB_UID="1000"
@@ -38,9 +38,9 @@ ENV SHELL=/bin/bash \
     NB_UID=$NB_UID \
     NB_GID=$NB_GID \
     HOME=/home/$NB_USER \
-    MINICONDA_VERSION=4.6.14 \
-    CONDA_VERSION=4.6.14 \
-    MINICONDA_MD5=718259965f234088d785cad1fbd7de03 \
+    MINICONDA_VERSION=4.11.0 \
+    CONDA_VERSION=4.11.0 \
+    MINICONDA_MD5=7675bd23411179956bcc4692f16ef27d \
     CONDA_DIR=/opt/conda \
     PATH=$CONDA_DIR/bin:${PATH}
 
@@ -48,9 +48,9 @@ ENV SHELL=/bin/bash \
 
 USER root
 
-# R system library pre-requisites
+# R system library pre-requisites # --no-install-recommends
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+    apt-get install -y \
     fonts-dejavu \
     unixodbc \
     unixodbc-dev \
@@ -69,7 +69,7 @@ ENV PATH=$CONDA_DIR/bin:${PATH}
 
 # Install conda via Miniconda
 RUN cd /tmp && \
-    curl --silent --show-error --output miniconda-installer.sh https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
+    curl --silent --show-error --output miniconda-installer.sh https://repo.anaconda.com/miniconda/Miniconda3-py37_${MINICONDA_VERSION}-Linux-x86_64.sh && \
     echo "${MINICONDA_MD5} *miniconda-installer.sh" | md5sum -c - && \
     /bin/bash miniconda-installer.sh -f -b -p $CONDA_DIR && \
     rm miniconda-installer.sh && \
@@ -84,23 +84,39 @@ RUN cd /tmp && \
 
 # R packages and Python packages that are usable via "reticulate".
 RUN conda install --quiet --yes \
-    'r-base=4.0.0' \
-    'r-caret=6.*' \
-    'r-crayon=1.3*' \
-    'r-devtools=2.3*' \
-    'r-forecast=8.12*' \
-    'r-hexbin=1.28*' \
-    'r-htmltools=0.4*' \
-    'r-htmlwidgets=1.5*' \
-    'r-irkernel=1.1*' \
-    'r-rmarkdown=2.2*' \
-    'r-rodbc=1.3*' \
-    'r-rsqlite=2.2*' \
-    'r-shiny=1.4*' \
-    'r-tidyverse=1.3*' \
-    'unixodbc=2.3.*' \
-    'r-tidymodels=0.1*' \
-    'r-reticulate=1.*' \
+    'r-base=4.1.2' \
+    'r-caret' \
+    'r-crayon' \
+    'r-devtools' \
+    'r-forecast' \
+    'r-hexbin' \
+    'r-htmltools' \
+    'r-htmlwidgets' \
+    'r-irkernel' \
+    'r-rmarkdown' \
+    'r-rodbc' \
+    'r-rsqlite' \
+    'r-shiny' \
+    'r-tidyverse' \
+    'unixodbc' \
+    'r-tidymodels' \
+    'r-reticulate' \
+    r-essentials \
+    r-fable \
+    r-fabletools \
+    r-ggplot2 \
+    r-dplyr \
+    r-stringr \
+    r-tsibble \
+    r-feasts \
+    r-urca \
+    r-readr \
+    r-remotes \
+    r-sodium \
+    r-jsonlite \
+    r-e1071 \
+    r-mlbench \
+    r-gbm \
     && \
     pip install --quiet --no-cache-dir \
     'boto3>1.0<2.0' \
