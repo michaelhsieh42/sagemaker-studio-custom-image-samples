@@ -1,0 +1,16 @@
+{
+"AppImageConfigName": "pt-191-transformer-4123-gpu-py38-cu111-ubuntu20",
+    "KernelGatewayImageConfig": {
+        "KernelSpecs": [
+            {
+                "Name": "python3",
+                "DisplayName": "Python 3"
+            }
+        ],
+        "FileSystemConfig": {
+            "MountPath": "/home/sagemaker-user",
+            "DefaultUid": 0,
+            "DefaultGid": 0
+        }
+    }
+}

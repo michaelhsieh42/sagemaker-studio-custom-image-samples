@@ -1,0 +1,12 @@
+{
+    "DefaultUserSettings": {
+      "KernelGatewayAppSettings": {
+        "CustomImages": [
+                {
+                     "ImageName": "pytorch-191-transformer-4.12.3-gpu",
+                     "AppImageConfigName": "pt-191-transformer-4123-gpu-py38-cu111-ubuntu20"
+                }
+              ]
+          }
+      }
+  }
