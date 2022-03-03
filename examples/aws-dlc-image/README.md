@@ -1,16 +1,13 @@
-## Conda Environments as Kernels
-
+## Build a custom notebook kernel from AWS Deep Learning Containers
 
 ### Overview
-
 This custom image sample demonstrates how to create a custom kernel from AWS Deep Learning Containers (AWS DLC) for use in SageMaker Studio Notebook. 
 
 The image must have the appropriate kernel package `ipykernel` installed. This example extends from a HuggingFace container from [AWS Deep Learning Container](https://github.com/aws/deep-learning-containers/blob/master/available_images.md#huggingface-training-containers) and installs some additional python libraries. This kernel image will be placed in SageMaker Studio as an custom image named `pytorch-191-transformer-4.12.3-gpu`.
 
-The steps are put into [create-and-update-image.sh](./create-and-update-image.sh) for convenience. You need to customize the four variables, `ACCOUNT_ID`, `REGION`, `DOMAINID`, and `ROLE_ARN` before you run the script.
+The steps below are put into [create-and-update-image.sh](./create-and-update-image.sh) for convenience. You need to customize the four variables, `ACCOUNT_ID`, `REGION`, `DOMAINID`, and `ROLE_ARN` before you run the script.
 
 ### Building the image
-
 Build the Docker image and push to Amazon ECR. 
 ```
 # Modify these as required. The Docker registry endpoint can be tuned based on your current region from https://docs.aws.amazon.com/general/latest/gr/ecr.html#ecr-docker-endpoints
@@ -56,12 +53,6 @@ Create a AppImageConfig for this image
 ```bash
 aws --region ${REGION} sagemaker create-app-image-config --cli-input-json file://app-image-config-input.json
 
-```
-
-Create a Domain, providing the SageMaker Image and AppImageConfig in the Domain input. Replace the placeholders for VPC ID, Subnet IDs, and Execution Role in `create-domain-input.json`
-
-```bash
-aws --region ${REGION} sagemaker create-domain --cli-input-json file://create-domain-input.json
 ```
 
 If you have an existing Domain, you can also use the `update-domain`
